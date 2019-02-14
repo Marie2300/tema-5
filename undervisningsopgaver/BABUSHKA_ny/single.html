@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            background-color: beige;
+        }
+
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        img {
+            max-width: 100%
+        }
+
+
+        #single {
+            background-color: beige;
+        }
+
+        #tilbage button {
+            font-size: 2rem;
+            padding: 1rem 2rem;
+            cursor: pointer;
+        }
+
+        #indhold {
+            min-height: 40vh;
+            background-color: white;
+            width: 50vw;
+            margin: 1rem auto;
+        }
+
+        .ret p {
+            font-size: 18px;
+            margin: 15px;
+
+        }
+
+        .ret h2 {
+            font-size: 22px;
+            margin: 35px 15px 15px 15px;
+        }
+
+        .ret {}
+
+
+        /*
+        #popup {
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            background-color: hsla(0, 46%, 18%, 0.5);
+            display: none;
+            overflow: scroll;
+        }
+
+        #indhold {
+            height: 80vh;
+            width: 50vw;
+                        background-color: white;
+            margin: 4rem auto;
+            text-align: center;
+
+        }
+
+        #luk {
+            position: fixed;
+            right: 2rem;
+        }
+
+        #luk button {
+            font-size: 2rem;
+            padding: 1rem 2rem;
+            cursor: pointer;
+        }
+*/
+
+    </style>
+</head>
+
+
+<body>
+
+    <main id="single">
+        <div id="tilbage">
+            <button>
+                << </button> </div> <section id="indhold">
+                    </section>
+    </main>
+
+
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get("id");
+
+
+        let alleRetter = [];
+
+
+        document.addEventListener("DOMContentLoaded",
+            start);
+
+        function start() {
+            getJson();
+            async function getJson() {
+                let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1jxxxFoWBuMJ1qhQ9BQIAyKHmP38XtAF9_sQr0xo5JLo");
+                alleRetter = await jsonData.json();
+
+                alleRetter.sort((a, b) => {
+                    return (a.pris - b.pris);
+                });
+
+                visRetter();
+            }
+
+            function visRetter() {
+                let dest = document.querySelector("#indhold");
+                dest.innerHTML = "";
+                alleRetter.forEach(ret => {
+                    if (id == ret.id) {
+                        let template =
+                            `<article class="ret">
+                                <h2>${ret.navn}</h2>
+                                <p>${ret.lang}</p>
+                                <p>${ret.pris} kr. </p>
+                                <img src="imgs/large/${ret.billede}.jpg" alt="${ret.navn}">
+                            </article>
+                        `;
+
+                        dest.insertAdjacentHTML("beforeend", template);
+
+
+
+                    }
+                })
+            }
+
+            document.querySelector("#tilbage button").addEventListener("click", () => {
+                location.href = "Babushka-popup-single.html";
+            })
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
